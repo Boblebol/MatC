@@ -1,33 +1,53 @@
-%option nounput
-%option noyywrap
 %{
-#include <stdio.h>
-#include <string.h>
-#include "y.tab.h"
-
+    #include <stdio.h>
+	#include "y.tab.h"
 %}
 
-identifier  [a-zA-Z_]+[0-9a-zA-Z_]*
-number      [0-9]+
+array       \[[1-9][0-9]*\]
+id          [a-zA-Z_][a-zA-Z0-9_]*
+cstint      [0-9]+
+cstflo      [0-9]+"."[0-9]+(E[+-][0-9]+)?
+string      \"(\\.|[^\\\"])*\"
+com         (\/\*+([^*](\*[^\/])?)*\*+\/)|(\/\/.*\n)
+endl        [\n]
+blank       [[:blank:]]
 
 %%
-
-{identifier}  	{ yylval.string = strdup(yytext); return ID; }
-{number}      	{ yylval.value = atoi(yytext); return NUMBER; }
-
-'\+'			{return ADD;}
-'-'				{return SUB;}
-'*'				{return MUL;}
-'\/'			{return DIV;}
-
-'\÷\+'			{return INCR;}
-'\-\-'			{return DECR;}
-
-'\)'			{return CLO;}
-'\('			{return OPE;}
-
-[()+*]        	{return yytext[0] ;}
-[\n]          	{return yytext[0] ;}
-.             	{printf("caractère inconnu %s",yytext) ;}
+"main"                  { return MAIN; }
+"int"                   { return INT; }
+"float"                 { return FLOAT; }
+"if"                    { return IF; }
+"while"                 { return WHILE; }
+"return"                { return RETURN; }
+"++"                    { return INCR; }
+"--"                    { return DECR; }
+"<="                    { return LEQ; }
+">="                    { return GEQ; }
+"=="                    { return EQ; }
+"!="                    { return NEQ; }
+"&&"                    { return AND; }
+"||"                    { return OR; }
+".."                    { return PTPT; }
+"<"                     { return LT; }
+">"                     { return GT;}
+","                     { return LISTSEP; }
+";"                     { return ENDINST; }
+"="                     { return AFFECT; }
+"+"                     { return PLUS; }
+"-"                     { return MINUS; }
+"*"                     { return MULT; }
+"/"                     { return DIV; }
+"("                     { return STARTEXPR; }
+")"                     { return ENDEXPR; }
+"{"                     { return STARTBLCK; }
+"}"                     { return ENDBLCK; }
+"["                     { return STARTEXTR; }
+"]"                     { return ENDEXTR; }
+{string}                { yylval.string = strdup(yytext); return STRING; }
+{id}                    { yylval.string = strdup(yytext); return ID; }
+{cstint}                { yylval.integer = atoi(yytext); return CSTINT; }
+{cstflo}                { yylval.flo = atof(yytext); return CSTFLO; }
+{com}|{blank}|{endl}    {}
+.                       { printf("FAUX: %s", yytext); }
 
 %%
