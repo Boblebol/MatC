@@ -16,21 +16,7 @@ blank       [[:blank:]]
 "main"                  { return MAIN; }
 "int"                   { return INT; }
 "float"                 { return FLOAT; }
-"if"                    { return IF; }
-"while"                 { return WHILE; }
 "return"                { return RETURN; }
-"++"                    { return INCR; }
-"--"                    { return DECR; }
-"<="                    { return LEQ; }
-">="                    { return GEQ; }
-"=="                    { return EQ; }
-"!="                    { return NEQ; }
-"&&"                    { return AND; }
-"||"                    { return OR; }
-".."                    { return PTPT; }
-"<"                     { return LT; }
-">"                     { return GT;}
-","                     { return LISTSEP; }
 ";"                     { return ENDINST; }
 "="                     { return AFFECT; }
 "+"                     { return PLUS; }
