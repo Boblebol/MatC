@@ -22,8 +22,6 @@ struct quad* code = NULL;
 	struct {
         struct symbol* result;
         struct quad* code;
-		struct quad_list* truelist;
-		struct quad_list* falselist;
     } codegen;
 }
 
@@ -31,12 +29,11 @@ struct quad* code = NULL;
 %token 	<flo> CSTFLO
 %token 	<string> ID
 %token	<codegen> INT FLOAT MATRIX STRING
-%token 	<codegen> PLUS MINUS MULT DIV TRANSP
+%token 	<codegen> PLUS MINUS MULT DIV
 %token	<codegen> PRINTF PRINTMAT RETURN
-%token 	<codegen> STARTEXTR ENDEXTR MAIN INCR DECR IF ELSE WHILE FOR LEQ GEQ EQ NEQ AND OR LT GT
-%token 	<codegen> LISTSEP ENDINST AFFECT STARTEXPR ENDEXPR STARTBLCK ENDBLCK STAR PTPT
+%token 	<codegen> STARTEXTR ENDEXTR MAIN 
+%token 	<codegen> ENDINST AFFECT STARTEXPR ENDEXPR STARTBLCK ENDBLCK
 %type 	<codegen> listinst inst decl affect
-%type 	<codegen> ctrl ifblck whileblck
 %type 	<codegen> cst expr
 
 %right AFFECT
@@ -60,45 +57,7 @@ axiom	:	INT MAIN STARTEXPR ENDEXPR STARTBLCK listinst ENDBLCK
 
 listinst	:   inst ENDINST
         	|   inst ENDINST listinst
-        	|   ctrl
-        	|   ctrl listinst
         	;
-	
-
-ctrl    :   ifblck
-        |   whileblck
-        ;
-
-
-ifblck  :   IF STARTEXPR test ENDEXPR STARTBLCK listinst ENDBLCK	
-				{ 
-					printf("Match : if block !!\n");
-				}
-        ;
-
-
-whileblck	:  	WHILE STARTEXPR test ENDEXPR STARTBLCK listinst ENDBLCK	
-					{ printf("Match : while block !!\n");}
-       	 	;
-
-
-test    :   expr GT expr	
-				{ printf("Match : test comapartif !!\n");}
-		|	expr LT expr
-				{ printf("Match : test comapartif !!\n");}
-		|	expr LEQ expr
-				{ printf("Match : test comapartif !!\n");}
-		|	expr GEQ expr
-				{ printf("Match : test comapartif !!\n");}
-		|	expr EQ expr
-				{ printf("Match : test comapartif !!\n");}
-		|	expr NEQ expr
-				{ printf("Match : test comapartif !!\n");}
-        |   test AND test	
-				{ printf("Match : test comapartif complet !!\n");}
-		|   test OR test	
-				{ printf("Match : test comapartif complet !!\n");}
-        ;
 
 
 inst    :   decl	
